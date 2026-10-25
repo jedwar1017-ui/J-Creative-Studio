@@ -11,7 +11,7 @@
 - Zero-dependency business-logic unit tests
 
 ## Run
-Serve this folder with `python -m http.server 8000` and open http://localhost:8000, or open `index.html` in a modern browser that supports ES modules. Tests: `node --test tests/*.test.mjs` (Node 22+).
+Serve this folder with `python -m http.server 8000` and open http://localhost:8000. Direct `file://` opening may be blocked by browser ES-module security. For phone access, enable a public static host when ready; a hosted deployment has not been verified. Tests: `node --test tests/*.test.mjs` (Node 22+).
 
 ## Reality check
 No purchase/cart/payment flow exists; no print service, 3D printer, inventory, verified costs, sales, rights-clearance, or sample-quality validation is implied. No third-party brand logos or copyrighted anime assets are included.
