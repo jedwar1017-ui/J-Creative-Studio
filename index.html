@@ -1,0 +1,42 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>J Creative Studio — Concept Lab</title>
+<style>
+:root{font-family:system-ui,sans-serif;color-scheme:dark;background:#0e111b;color:#f8f5f2}
+*{box-sizing:border-box}body{margin:0;background:#0e111b}
+main{max-width:1170px;margin:auto;padding:25px 18px 80px}
+.eyebrow{letter-spacing:.2em;color:#e3ae87;font-weight:800;font-size:.8rem}h1{font-size:clamp(2.5rem,7vw,5rem);line-height:1.02;margin:12px 0}h2{font-size:1.4rem}
+p{color:#c8c5cc;line-height:1.6}.hint{color:#b2abb6;font-size:.85rem}
+.notice{border:1px solid #aa8466;background:#242028;padding:16px;border-radius:14px}
+.controls{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:22px 0}
+button,select{border:1px solid #b79580;border-radius:10px;background:#2a2430;color:#fff;font:inherit;padding:11px 16px;min-height:44px;cursor:pointer}
+button.primary{background:#f2c39b;color:#1d1420;border:0;font-weight:800}
+button:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(265px,1fr));gap:16px}
+.card{background:#201f2b;border:1px solid #5e5362;border-radius:18px;overflow:hidden}
+.art{height:280px;display:grid;place-items:center;position:relative;overflow:hidden}
+.art::before,.art::after{content:"";display:block;position:absolute}
+.art.horizon{background:linear-gradient(164deg,#070e23 0 42%,#2668af 42% 47%,#131822 48% 56%,#263045 57% 100%)}
+.art.horizon::before{width:240px;height:140px;background:linear-gradient(30deg,transparent 48%,#f3f1dc 48% 50%,transparent 50%),repeating-linear-gradient(100deg,#071629 0 21px,#334a5a 23px 27px);clip-path:polygon(0 60%,20% 35%,33% 52%,55% 4%,69% 40%,85% 16%,100% 58%,100% 100%,0 100%);top:100px}
+.art.horizon::after{width:210px;height:4px;background:#91d0ff;transform:rotate(-32deg);box-shadow:0 0 24px 10px #58a7f999}
+.art.cosmos{background:radial-gradient(circle at 50% 45%,#7654a0 0,#283458 30%,#090c1c 72%)}
+.art.cosmos::before{width:180px;height:180px;border:25px solid #a9754d;border-radius:40%;transform:rotate(-25deg);box-shadow:0 0 18px #ffaa77,inset 0 0 25px #ffc28d}
+.art.cosmos::after{width:4px;height:4px;border-radius:50%;background:#fff;box-shadow:80px 40px white,-70px -90px white,100px -75px white,-100px 80px #fff,47px -120px #fff,125px 65px white}
+.art.bloom{background:radial-gradient(circle at 68% 38%,#bd6259 0 15%,transparent 16%),radial-gradient(circle at 29% 51%,#f6c265 0 20%,transparent 21%),linear-gradient(135deg,#11142b,#414272 55%,#7d4e7f)}
+.art.bloom::before{width:170px;height:170px;border:10px solid #f7b8a9;border-radius:50%;transform:rotate(20deg);clip-path:polygon(0 0,100% 0,70% 100%,0 100%)}
+.art.bloom::after{width:65px;height:65px;border-radius:5% 80% 5% 80%;background:#ffb8bd;transform:rotate(34deg);box-shadow:60px 10px 0 -12px #e9a2ad,-55px 15px 0 -10px #e5a0b4}
+.art-label{position:relative;z-index:1;background:#10101bbb;padding:8px 12px;border:1px solid #ffffff50;letter-spacing:.22em;font-size:.71rem;align-self:end;margin-bottom:17px}
+.content{padding:20px}h3{font-size:1.35rem;margin:0 0 6px}.badge{color:#f7ccad;text-transform:uppercase;font-size:.74rem;letter-spacing:.1em}
+textarea{width:100%;min-height:130px;background:#171722;border:1px solid #7e6b77;border-radius:10px;color:#fff;padding:14px;font:inherit}
+#status{min-height:25px;color:#b9f5d6}
+</style></head><body><main>
+<div class="eyebrow">J DESIGNS / CREATIVE STUDIO</div><h1>Ideas you can<br>bring to life.</h1>
+<p>A visual laboratory for your first collection. Explore a direction, save your shortlist, and export a production checklist.</p>
+<p class="notice"><strong>Concept artwork only.</strong> These illustrations are procedural previews—not product photographs, final print files, or items for sale.</p>
+<section><div class="controls"><h2 style="flex:1;margin:0">Creative collection</h2><label for="family">Show </label><select id="family"><option value="all">All concepts</option><option value="Apparel">Apparel</option><option value="3D Object">3D objects</option><option value="Art Print">Art prints</option></select></div>
+<div class="grid" id="gallery"></div></section>
+<section style="margin-top:35px"><h2>Production brief</h2><p>Pick a design above and note the material, dimensions, files, and proof results. Your notes stay in this browser until you export.</p>
+<p><strong>Selected design:</strong> <span id="selected">None</span></p>
+<label for="notes">Manufacturing notes and quality checks</label><textarea id="notes" maxlength="3000" placeholder="Example: source artwork format, fabric, print size, sample review..."></textarea>
+<div class="controls"><button type="button" class="primary" id="download">Download production brief (.md)</button><span id="saved">0 saved</span></div><p id="status" role="status" aria-live="polite"></p>
+</section></main><script type="module" src="./app.mjs"></script></body></html>
