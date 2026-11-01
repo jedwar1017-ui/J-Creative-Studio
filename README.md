@@ -3,12 +3,15 @@
 **Status:** Functional browser-based concept catalog, not a production store. This site previews three original design directions using CSS illustration (not licensed artwork, actual product photography or proven physical samples).
 
 ## Implemented
-- Filterable concepts: Shattered Horizon, Cosmos Forge, Solar/Lunar Bloom
-- Visual concept panels with distinct CSS illustrations
-- Concept shortlisting stored on this device
-- Editable production notes and downloadable Markdown creative brief
-- Responsive, accessible keyboard-operated controls
-- Zero-dependency business-logic unit tests
+- Three starter concepts: Shattered Horizon, Cosmos Forge, Solar/Lunar Bloom
+- **Add your own designs** (Apparel, 3D Object, Art Print, Tattoo) with name, product idea, colors, motif and description; delete your own designs
+- Filter by collection or shortlist; shortlist stored on this device
+- **Workbench** per design: notes, a 6-step proof checklist with progress, and a **cost & profit calculator** (item cost, shipping, selling fee %, sale price → profit, margin %, break-even price)
+- Downloadable Markdown creative brief that includes ticked checks and the cost estimate
+- **Backup / restore** of all work as a JSON file (imported files are validated and cleaned)
+- Older saved data (v1) loads without loss
+- Responsive, phone-friendly, keyboard-accessible controls
+- Zero-dependency business-logic unit tests (12)
 
 ## Run
 Serve this folder with `python -m http.server 8000` and open http://localhost:8000. Direct `file://` opening may be blocked by browser ES-module security. For phone access, enable a public static host when ready; a hosted deployment has not been verified. Tests: `node --test tests/*.test.mjs` (Node 22+).

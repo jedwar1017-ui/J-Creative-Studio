@@ -29,14 +29,53 @@ button:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px sol
 .content{padding:20px}h3{font-size:1.35rem;margin:0 0 6px}.badge{color:#f7ccad;text-transform:uppercase;font-size:.74rem;letter-spacing:.1em}
 textarea{width:100%;min-height:130px;background:#171722;border:1px solid #7e6b77;border-radius:10px;color:#fff;padding:14px;font:inherit}
 #status{min-height:25px;color:#b9f5d6}
+.art.custom{background:radial-gradient(circle at 30% 30%,hsl(var(--h) 70% 55%) 0,transparent 45%),radial-gradient(circle at 75% 70%,hsl(calc(var(--h) + 140) 60% 45%) 0,transparent 50%),linear-gradient(140deg,#0d0f1c,hsl(var(--h) 35% 22%))}
+.monogram{position:absolute;inset:0;display:grid;place-items:center;font-size:7rem;font-weight:900;color:#ffffff30}
+.card.active{border-color:#f2c39b;box-shadow:0 0 0 2px #f2c39b55}
+.panel{background:#1a1a26;border:1px solid #5e5362;border-radius:18px;padding:20px;margin-top:22px}
+details.panel summary{cursor:pointer;font-weight:800;font-size:1.15rem;min-height:44px;display:flex;align-items:center}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:12px}
+.form-grid label,.costs label{display:flex;flex-direction:column;gap:6px;font-size:.9rem;color:#d9d3dc}
+input[type=text],input[type=number]{background:#171722;border:1px solid #7e6b77;border-radius:10px;color:#fff;padding:11px 12px;font:inherit;min-height:44px}
+input:focus-visible{outline:3px solid #fff;outline-offset:2px}
+.check{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid #ffffff14;min-height:44px}
+.check input{flex:none;width:22px;height:22px;accent-color:#f2c39b}
+progress{width:100%;height:12px;accent-color:#9be3b8}
+.costs{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+.result{font-weight:700;padding:12px;border-radius:10px;background:#171722}.result.good{color:#9be3b8}.result.bad{color:#ff9b8f}
+.error{color:#ff9b8f;min-height:22px}
+.danger{border-color:#ff9b8f;color:#ffb3aa;background:transparent}
+.file-btn{border:1px solid #b79580;border-radius:10px;background:#2a2430;padding:11px 16px;min-height:44px;cursor:pointer;display:inline-flex;align-items:center}
+.file-btn:focus-within{outline:3px solid #fff;outline-offset:3px}
+.file-btn input{position:absolute;opacity:0;width:1px;height:1px}
 </style></head><body><main>
 <div class="eyebrow">J DESIGNS / CREATIVE STUDIO</div><h1>Ideas you can<br>bring to life.</h1>
-<p>A visual laboratory for your first collection. Explore a direction, save your shortlist, and export a production checklist.</p>
+<p>A visual laboratory for your first collection. Add your own designs, track proof checks, work out real profit, and export a production brief.</p>
 <p class="notice"><strong>Concept artwork only.</strong> These illustrations are procedural previews—not product photographs, final print files, or items for sale.</p>
-<section><div class="controls"><h2 style="flex:1;margin:0">Creative collection</h2><label for="family">Show </label><select id="family"><option value="all">All concepts</option><option value="Apparel">Apparel</option><option value="3D Object">3D objects</option><option value="Art Print">Art prints</option></select></div>
-<div class="grid" id="gallery"></div></section>
-<section style="margin-top:35px"><h2>Production brief</h2><p>Pick a design above and note the material, dimensions, files, and proof results. Your notes stay in this browser until you export.</p>
-<p><strong>Selected design:</strong> <span id="selected">None</span></p>
-<label for="notes">Manufacturing notes and quality checks</label><textarea id="notes" maxlength="3000" placeholder="Example: source artwork format, fabric, print size, sample review..."></textarea>
-<div class="controls"><button type="button" class="primary" id="download">Download production brief (.md)</button><span id="saved">0 saved</span></div><p id="status" role="status" aria-live="polite"></p>
-</section></main><script type="module" src="./app.mjs"></script></body></html>
+<section><div class="controls"><h2 style="flex:1;margin:0">Creative collection</h2><label for="family">Show</label><select id="family"><option value="all">All designs</option><option value="Apparel">Apparel</option><option value="3D Object">3D objects</option><option value="Art Print">Art prints</option><option value="Tattoo">Tattoos</option></select><label class="check" style="border:0;padding:0"><input type="checkbox" id="only-saved"> Shortlist only</label></div>
+<div class="grid" id="gallery"></div>
+<details class="panel" id="add-panel"><summary>＋ Add your own design</summary>
+<form id="add-form" novalidate><div class="form-grid">
+<label>Design name *<input type="text" name="name" maxlength="60" required placeholder="e.g. Night Shift Dragon"></label>
+<label>Collection *<select name="family" id="new-family"></select></label>
+<label>Product idea<input type="text" name="suggestedMedium" maxlength="60" placeholder="e.g. Hoodie back print"></label>
+<label>Colors<input type="text" name="palette" maxlength="80" placeholder="e.g. Black / Red / Gold"></label>
+<label>Main image or symbol<input type="text" name="motif" maxlength="120" placeholder="e.g. Coiled dragon around a wrench"></label>
+<label>One-line description<input type="text" name="short" maxlength="200" placeholder="What makes it stand out?"></label>
+</div><p class="error" id="add-error" role="alert"></p><button type="submit" class="primary">Add design</button></form></details>
+</section>
+<section class="panel" id="workbench" style="margin-top:35px"><h2 style="margin-top:0">Workbench: <span id="selected">None</span></h2>
+<h3>1. Notes</h3><label for="notes" class="hint">Material, sizes, files, supplier, sample results. Saved on this device as you type.</label><textarea id="notes" maxlength="3000" placeholder="Example: source artwork format, fabric, print size, sample review..."></textarea>
+<h3>2. Proof checklist</h3><progress id="progress" value="0" max="6"></progress><p id="progress-text" class="hint"></p><div id="checks"></div>
+<h3>3. Cost &amp; profit (per item)</h3><div class="costs">
+<label>What it costs you ($)<input type="number" id="unitCost" min="0" step="0.01" inputmode="decimal" placeholder="0.00"></label>
+<label>Shipping to you ($)<input type="number" id="shipping" min="0" step="0.01" inputmode="decimal" placeholder="0.00"></label>
+<label>Selling fees (%)<input type="number" id="feePercent" min="0" max="100" step="0.1" inputmode="decimal" placeholder="0"></label>
+<label>Your sale price ($)<input type="number" id="price" min="0" step="0.01" inputmode="decimal" placeholder="0.00"></label>
+</div><p id="cost-result" class="result" aria-live="polite"></p>
+<div class="controls"><button type="button" class="primary" id="download">Download brief (.md)</button><button type="button" class="danger" id="delete" hidden>Delete this design</button></div>
+</section>
+<section class="panel"><h2 style="margin-top:0">Backup</h2><p class="hint">Your work lives in this browser only. Save a backup file to move it to another device or keep it safe.</p>
+<div class="controls"><button type="button" id="backup">Save backup file</button><label class="file-btn">Restore from backup<input type="file" id="restore" accept="application/json,.json"></label><span id="saved">0 on shortlist</span></div></section>
+<p id="status" role="status" aria-live="polite"></p>
+</main><script type="module" src="./app.mjs"></script></body></html>
