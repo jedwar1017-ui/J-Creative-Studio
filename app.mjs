@@ -1,4 +1,4 @@
-import {FAMILIES, PROOF_CHECKS, allConcepts, calcMargin, makeBrief, makeConcept, normalizeState} from "./catalog.mjs";
+import {FAMILIES, PROOF_CHECKS, allConcepts, calcMargin, makeBrief, makeConcept, normalizeState, parseBackup} from "./catalog.mjs";
 
 const $ = id => document.getElementById(id);
 const KEY = "jcreative-v1";
@@ -21,7 +21,7 @@ function persist() {
 function download(name, text, type) {
   const a = document.createElement("a");
   a.href = URL.createObjectURL(new Blob([text], {type}));
-  a.download = name; a.click();
+  a.download = name; document.body.append(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
 }
 
@@ -156,7 +156,7 @@ $("restore").addEventListener("change", async e => {
   if (!file) return;
   try {
     if (file.size > 2_000_000) throw Error("That file is too big to be a backup");
-    const next = normalizeState(JSON.parse(await file.text()));
+    const next = parseBackup(await file.text());
     if (!confirm("Replace everything on this device with the backup (" + next.custom.length + " of your own designs)?")) return;
     state = next; persist(); select(concepts()[0]); renderGallery();
     status("Backup restored.");
@@ -164,3 +164,4 @@ $("restore").addEventListener("change", async e => {
 });
 
 persist(); renderWorkbench(); renderGallery();
+

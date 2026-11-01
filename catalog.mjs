@@ -34,6 +34,7 @@ function slug(text) {
 
 /** Build a validated user-created concept. Throws with a readable message on bad input. */
 export function makeConcept(input, existingIds = []) {
+	if (existingIds.filter(id => String(id).startsWith("custom-")).length >= MAX_CUSTOM) throw Error("Keep at most 50 custom designs. Back up your work before removing a design to make room.");
   if (!input || typeof input !== "object") throw Error("Design details are missing");
   const name = cleanText(input.name, LIMITS.name);
   if (!name) throw Error("Give the design a name");
@@ -157,3 +158,32 @@ export function normalizeState(raw) {
     costs: pick(r.costs, v => cleanCosts(v) ?? undefined)
   };
 }
+
+/** Restore is strict: unrelated or damaged JSON must not erase current work. */
+export function parseBackup(text) {
+  const raw = JSON.parse(text);
+  const object = v => v !== null && typeof v === "object" && !Array.isArray(v);
+  if (!object(raw) || !Array.isArray(raw.saved) || !object(raw.notes) ||
+      (raw.version !== undefined && raw.version !== 1 && raw.version !== 2)) {
+    throw Error("This is not a supported Creative Studio backup");
+  }
+  if (raw.version === 2 && (!Array.isArray(raw.custom) || !object(raw.checks) || !object(raw.costs))) {
+    throw Error("The backup is missing design data");
+  }
+  if (raw.custom !== undefined && (!Array.isArray(raw.custom) || raw.custom.length > MAX_CUSTOM)) {
+    throw Error("The backup exceeds the 50-design limit or has invalid designs");
+  }
+  const next = normalizeState(raw);
+  const original = raw.custom ?? [];
+  if (next.custom.length !== original.length ||
+      next.custom.some((c, i) => c.id !== original[i].id)) {
+    throw Error("The backup has invalid or duplicate design IDs; nothing was replaced");
+  }
+  const ids = new Set(allConcepts(next.custom).map(c => c.id));
+  if (raw.saved.some(id => !ids.has(id)) ||
+      Object.entries(raw.notes).some(([id, note]) => !ids.has(id) || typeof note !== "string" || note.length > LIMITS.notes)) {
+    throw Error("The backup contains invalid shortlist entries or notes");
+  }
+  return next;
+}
+
