@@ -3,8 +3,9 @@ import {FAMILIES, PROOF_CHECKS, allConcepts, calcMargin, makeBrief, makeConcept,
 const $ = id => document.getElementById(id);
 const KEY = "jcreative-v1";
 
+let loadFailed = false;
 let state = normalizeState({});
-try { state = normalizeState(JSON.parse(localStorage.getItem(KEY) ?? "{}")); } catch { /* storage blocked or corrupt */ }
+try { state = normalizeState(JSON.parse(localStorage.getItem(KEY) ?? "{}")); } catch { loadFailed = true; }
 
 const concepts = () => allConcepts(state.custom);
 let selected = concepts()[0];
@@ -14,8 +15,10 @@ const status = text => { $("status").textContent = text; };
 const money = n => "$" + n.toFixed(2);
 
 function persist() {
-  try { localStorage.setItem(KEY, JSON.stringify(state)); } catch { status("This browser blocked saving. Use Backup to keep your work."); }
+  let saved = true;
+  try { localStorage.setItem(KEY, JSON.stringify(state)); } catch { saved = false; status("Saving failed. Use Backup to keep your work before closing or reloading."); }
   $("saved").textContent = state.saved.length + " on shortlist";
+  return saved;
 }
 
 function download(name, text, type) {
@@ -125,7 +128,7 @@ $("delete").addEventListener("click", () => {
   state.custom = state.custom.filter(c => c.id !== id);
   state.saved = state.saved.filter(x => x !== id);
   delete state.notes[id]; delete state.checks[id]; delete state.costs[id];
-  persist(); select(concepts()[0]); renderGallery(); status("Design deleted.");
+  const saved = persist(); select(concepts()[0]); renderGallery(); if(saved) status("Design deleted.");
 });
 
 const familySelect = $("new-family");
@@ -136,10 +139,10 @@ $("add-form").addEventListener("submit", e => {
   try {
     const f = new FormData(e.target);
     const c = makeConcept(Object.fromEntries(f), concepts().map(x => x.id));
-    state.custom.push(c); persist(); e.target.reset();
+    state.custom.push(c); const saved = persist(); e.target.reset();
     $("add-panel").open = false;
     select(c); renderGallery();
-    status("Added " + c.name + ". It's open in the workbench.");
+    if(saved) status("Added " + c.name + ". It's open in the workbench.");
     $("workbench").scrollIntoView({behavior: "smooth"});
   } catch (err) { $("add-error").textContent = err.message; }
 });
@@ -158,10 +161,12 @@ $("restore").addEventListener("change", async e => {
     if (file.size > 2_000_000) throw Error("That file is too big to be a backup");
     const next = parseBackup(await file.text());
     if (!confirm("Replace everything on this device with the backup (" + next.custom.length + " of your own designs)?")) return;
-    state = next; persist(); select(concepts()[0]); renderGallery();
-    status("Backup restored.");
+    state = next; const saved = persist(); select(concepts()[0]); renderGallery();
+    if(saved) status("Backup restored.");
   } catch (err) { status("Couldn't restore: " + (err instanceof SyntaxError ? "that isn't a backup file" : err.message)); }
 });
 
-persist(); renderWorkbench(); renderGallery();
+$("saved").textContent = state.saved.length + " on shortlist";
+renderWorkbench(); renderGallery();
+if(loadFailed) status("Saved work could not be loaded. Stored data has not been overwritten; restore a backup before editing.");
 
